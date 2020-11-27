@@ -16,7 +16,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List _taskList = ["Luidi", "Matheus"];
+  final _taskController = TextEditingController();
+
+  List _taskList = [];
+
+  void _addTask() {
+    setState(() {
+      Map<String, dynamic> newTask = Map();
+      newTask["title"] = _taskController.text;
+      newTask["ok"] = false;
+      _taskController.text = "";
+      _taskList.add(newTask);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +46,7 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    controller: _taskController,
                     decoration: InputDecoration(
                         labelText: "New task",
                         labelStyle: TextStyle(
@@ -46,7 +59,7 @@ class _HomeState extends State<Home> {
                   color: Colors.blueAccent,
                   child: Text("Add"),
                   textColor: Colors.white,
-                  onPressed: () {}
+                  onPressed: _addTask
                 )
               ],
             ),
@@ -62,6 +75,11 @@ class _HomeState extends State<Home> {
                   secondary: CircleAvatar(
                     child: Icon(_taskList[index]["ok"] ? Icons.check : Icons.error),
                   ),
+                  onChanged: (checked) {
+                    setState(() {
+                      _taskList[index]["ok"] = checked;
+                    });
+                  },
                 );
               }
             )
