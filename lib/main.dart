@@ -20,6 +20,18 @@ class _HomeState extends State<Home> {
 
   List _taskList = [];
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _readFile().then((value) {
+      setState(() {
+        _taskList = json.decode(value);
+      });
+    });
+  }
+
   void _addTask() {
     setState(() {
       Map<String, dynamic> newTask = Map();
@@ -27,6 +39,7 @@ class _HomeState extends State<Home> {
       newTask["ok"] = false;
       _taskController.text = "";
       _taskList.add(newTask);
+      _saveFile();
     });
   }
 
@@ -78,6 +91,7 @@ class _HomeState extends State<Home> {
                   onChanged: (checked) {
                     setState(() {
                       _taskList[index]["ok"] = checked;
+                      _saveFile();
                     });
                   },
                 );
