@@ -81,25 +81,40 @@ class _HomeState extends State<Home> {
             child: ListView.builder(
               padding: EdgeInsets.only(top: 10),
               itemCount: _taskList.length,
-              itemBuilder: (context, index) {
-                return CheckboxListTile(
-                  title: Text(_taskList[index]["title"]),
-                  value: _taskList[index]["ok"],
-                  secondary: CircleAvatar(
-                    child: Icon(_taskList[index]["ok"] ? Icons.check : Icons.error),
-                  ),
-                  onChanged: (checked) {
-                    setState(() {
-                      _taskList[index]["ok"] = checked;
-                      _saveFile();
-                    });
-                  },
-                );
-              }
+              itemBuilder: buildItemList
             )
           )
         ],
       ),
+    );
+  }
+
+  Widget buildItemList (context, index) {
+    return Dismissible(
+        key: Key(index.toString()),
+        background: Container(
+          color: Colors.red,
+          child: Align(
+            alignment: Alignment(-0.9, 0),
+              child: Icon(Icons.delete,
+                color: Colors.white
+              )
+            ),
+          ),
+        direction: DismissDirection.startToEnd,
+      child: CheckboxListTile(
+        title: Text(_taskList[index]["title"]),
+        value: _taskList[index]["ok"],
+        secondary: CircleAvatar(
+          child: Icon(_taskList[index]["ok"] ? Icons.check : Icons.error),
+        ),
+        onChanged: (checked) {
+          setState(() {
+            _taskList[index]["ok"] = checked;
+            _saveFile();
+          });
+        },
+      )
     );
   }
 
